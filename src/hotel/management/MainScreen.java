@@ -44,26 +44,56 @@ public class MainScreen extends javax.swing.JFrame {
         logout_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         logout_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-exit-32.png"))); // NOI18N
         logout_button.setText("Logout");
+        logout_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_buttonActionPerformed(evt);
+            }
+        });
 
         customer_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         customer_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-people-64.png"))); // NOI18N
         customer_button.setText("Customer List");
+        customer_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customer_buttonActionPerformed(evt);
+            }
+        });
 
         rest_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         rest_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-branding-64.png"))); // NOI18N
         rest_button.setText("Restaurant");
+        rest_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rest_buttonActionPerformed(evt);
+            }
+        });
 
         room_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         room_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-address-book-64.png"))); // NOI18N
         room_button.setText("Rooms Available");
+        room_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                room_buttonActionPerformed(evt);
+            }
+        });
 
         staff_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         staff_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-supplier-64.png"))); // NOI18N
         staff_button.setText("Staff Infomation");
+        staff_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staff_buttonActionPerformed(evt);
+            }
+        });
 
         add_staff_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         add_staff_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-name-tag-64.png"))); // NOI18N
         add_staff_button.setText("Add Staff");
+        add_staff_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_staff_buttonActionPerformed(evt);
+            }
+        });
 
         fb.setText("Staff Feedback");
 
@@ -127,6 +157,42 @@ public class MainScreen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void room_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_room_buttonActionPerformed
+        // TODO add your handling code here:
+        new RoomList().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_room_buttonActionPerformed
+
+    private void customer_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customer_buttonActionPerformed
+        // TODO add your handling code here:
+        new CustomerList().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_customer_buttonActionPerformed
+
+    private void staff_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staff_buttonActionPerformed
+        // TODO add your handling code here:
+        new StaffInfo().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_staff_buttonActionPerformed
+
+    private void rest_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rest_buttonActionPerformed
+        // TODO add your handling code here:
+        new RestMenu().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_rest_buttonActionPerformed
+
+    private void add_staff_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_staff_buttonActionPerformed
+        // TODO add your handling code here:
+        new AddStaff().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_add_staff_buttonActionPerformed
+
+    private void logout_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_buttonActionPerformed
+        // TODO add your handling code here:
+        new Login().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_logout_buttonActionPerformed
 
     /**
      * @param args the command line arguments

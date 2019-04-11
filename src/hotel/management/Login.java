@@ -5,6 +5,15 @@
  */
 package hotel.management;
 
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ayush guptA
@@ -16,6 +25,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        connectSQL();
     }
 
     /**
@@ -42,6 +52,11 @@ public class Login extends javax.swing.JFrame {
 
         login_button.setFont(new java.awt.Font("Stencil", 1, 18)); // NOI18N
         login_button.setText("login");
+        login_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                login_buttonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Kristen ITC", 1, 18)); // NOI18N
         jLabel1.setText("Username: ");
@@ -118,7 +133,71 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private JFrame frame;
+    private void login_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_buttonActionPerformed
+        // TODO add your handling code here:
+        String user,pass;
+        user = username.getText();
+        pass = new String(password.getPassword());
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("USE hotelsystem");
+            ResultSet rs = stmt.executeQuery("select * from staff;");
+            int f=0;
+            while(rs.next()){
+                String usr = rs.getString("username");
+                String pwd = rs.getString("password");
+                if(user.equals(usr) && pass.equals(pwd)){
+                    f=1;
+                    break;
+                }
+            }
+            rs.close();
+            if(f==1){
+                new MainScreen().setVisible(true);
+                this.setVisible(false);
+            }
+            else{
+                JOptionPane.showMessageDialog(frame, "Invalid user id or Password");
+                username.setText("");
+                password.setText("");
+            }
+        }
+        catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
+        {
+            
+        }
+        
+    }//GEN-LAST:event_login_buttonActionPerformed
 
+    
+    private void connectSQL(){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS hotelsystem;");
+            stmt.executeUpdate("USE hotelsystem");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS staff (id int NOT NULL PRIMARY KEY, name varchar(20) NOT NULL, contact varchar(20) NOT NULL, aadhar  varchar(20) NOT NULL, username  varchar(20) NOT NULL UNIQUE, password  varchar(20) NOT NULL, work  varchar(20) NOT NULL);");
+            ResultSet rs = stmt.executeQuery("select COUNT(*) from staff;");
+            rs.next();
+            String count =rs.getString("COUNT(*)");
+            if(count.equals("0")){
+                stmt.executeUpdate("INSERT into staff values(1,'admin','0','0','admin','1234','admin');");
+            }
+            
+        }
+        catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
+        {
+            
+        }
+    }
     /**
      * @param args the command line arguments
      */
