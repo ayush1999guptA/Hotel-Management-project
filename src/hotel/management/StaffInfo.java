@@ -5,6 +5,12 @@
  */
 package hotel.management;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ayush guptA
@@ -16,6 +22,35 @@ public class StaffInfo extends javax.swing.JFrame {
      */
     public StaffInfo() {
         initComponents();
+        showDetails();
+    }
+    
+    public void showDetails(){
+        DefaultTableModel model = (DefaultTableModel)table.getModel();  
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("use hotelsystem;");
+            ResultSet rs=stmt.executeQuery("select * from staff;");
+            while(rs.next()){
+                String name=rs.getString("name");
+                String contact=rs.getString("contact");
+                String aadhar=rs.getString("aadhar");
+                String work=rs.getString("work");                
+              model.addRow(new Object[]{name,contact,aadhar,work});
+            }
+            rs.close();  
+            con.close();
+            stmt.close();           
+        }
+        catch(Exception e)
+        {
+
+        }
+        table.setModel(model);        
     }
 
     /**
@@ -29,11 +64,9 @@ public class StaffInfo extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         home_button = new javax.swing.JButton();
-        back_button = new javax.swing.JButton();
         logout_button = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        available_button = new javax.swing.JButton();
+        table = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -42,37 +75,39 @@ public class StaffInfo extends javax.swing.JFrame {
         home_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         home_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-home-page-32.png"))); // NOI18N
         home_button.setText("Home");
-
-        back_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
-        back_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-go-back-32.png"))); // NOI18N
-        back_button.setText("Back");
+        home_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                home_buttonActionPerformed(evt);
+            }
+        });
 
         logout_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         logout_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-exit-32.png"))); // NOI18N
         logout_button.setText("Logout");
+        logout_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_buttonActionPerformed(evt);
+            }
+        });
 
-        jTable1.setBackground(new java.awt.Color(255, 204, 204));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setBackground(new java.awt.Color(204, 204, 204));
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Staff Name", "Adhaar Number", "Address", "Contact Number", "Shift", "Type of Work"
+                "Staff Name", "Adhaar Number", "Contact Number", "Type of Work"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-
-        available_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
-        available_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-worker-64.png"))); // NOI18N
-        available_button.setText("Available Staff");
+        jScrollPane1.setViewportView(table);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,32 +116,22 @@ public class StaffInfo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(home_button)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(back_button)
-                .addGap(18, 18, 18)
                 .addComponent(logout_button)
                 .addGap(1, 1, 1))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(244, Short.MAX_VALUE)
-                .addComponent(available_button)
-                .addGap(346, 346, 346))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(63, 63, 63)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 631, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(home_button)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(back_button)
-                        .addComponent(logout_button)))
+                    .addComponent(logout_button))
                 .addGap(38, 38, 38)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(107, 107, 107)
-                .addComponent(available_button)
-                .addGap(0, 62, Short.MAX_VALUE))
+                .addGap(0, 242, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -122,6 +147,18 @@ public class StaffInfo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void home_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_home_buttonActionPerformed
+        // TODO add your handling code here:
+        new MainScreen().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_home_buttonActionPerformed
+
+    private void logout_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_buttonActionPerformed
+        // TODO add your handling code here:
+        new Login().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_logout_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -159,12 +196,10 @@ public class StaffInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton available_button;
-    private javax.swing.JButton back_button;
     private javax.swing.JButton home_button;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton logout_button;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

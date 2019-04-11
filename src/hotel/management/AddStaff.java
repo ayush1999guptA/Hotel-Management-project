@@ -5,6 +5,15 @@
  */
 package hotel.management;
 
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ayush guptA
@@ -35,13 +44,13 @@ public class AddStaff extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        namef = new javax.swing.JTextField();
+        contactf = new javax.swing.JTextField();
+        adhaarf = new javax.swing.JTextField();
+        userf = new javax.swing.JTextField();
+        workf = new javax.swing.JTextField();
         addstaff_button = new javax.swing.JButton();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        passf = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,6 +59,11 @@ public class AddStaff extends javax.swing.JFrame {
         back_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         back_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-go-back-32.png"))); // NOI18N
         back_button.setText("Back");
+        back_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_buttonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Name");
 
@@ -66,6 +80,11 @@ public class AddStaff extends javax.swing.JFrame {
         addstaff_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         addstaff_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-name-tag-64.png"))); // NOI18N
         addstaff_button.setText("Add Staff");
+        addstaff_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addstaff_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -87,12 +106,12 @@ public class AddStaff extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGap(48, 48, 48)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4)
-                            .addComponent(jTextField6)
-                            .addComponent(jPasswordField1)))
+                            .addComponent(namef, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(contactf)
+                            .addComponent(adhaarf)
+                            .addComponent(userf)
+                            .addComponent(workf)
+                            .addComponent(passf)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(260, 260, 260)
                         .addComponent(addstaff_button)))
@@ -105,19 +124,19 @@ public class AddStaff extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(namef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(adhaarf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(userf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -125,12 +144,12 @@ public class AddStaff extends javax.swing.JFrame {
                         .addGap(54, 54, 54)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(workf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addComponent(addstaff_button)
                         .addGap(60, 60, 60))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(passf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -147,6 +166,57 @@ public class AddStaff extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private JFrame frame;
+    private void addstaff_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addstaff_buttonActionPerformed
+        // TODO add your handling code here:
+        String name,contact,aadhar,usr,pass,work;
+        name=namef.getText();
+        pass = new String(passf.getPassword());
+        contact = contactf.getText();
+        aadhar = adhaarf.getText();;
+        usr = userf.getText();
+        work = workf.getText();
+        if(name.equals("")||pass.equals("")||contact.equals("")||aadhar.equals("")||usr.equals("")||work.equals("")){
+            JOptionPane.showMessageDialog(frame, "Please fill the details");
+            return;
+        }
+        int l =contact.length();
+        for(int i=0;i<l;i++){
+            if(contact.charAt(i)>'9'||contact.charAt(i)<'0'){
+                JOptionPane.showMessageDialog(frame, "Invalid contact");
+                return;
+            }
+        }
+        l =aadhar.length();
+        for(int i=0;i<l;i++){
+            if(aadhar.charAt(i)>'9'||aadhar.charAt(i)<'0'){
+                JOptionPane.showMessageDialog(frame, "Invalid Aadhar");
+                return;
+            }
+        }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("USE hotelsystem");
+            stmt.executeUpdate("insert into staff(name,contact,aadhar,username,password,work) values('"+name+"','"+contact+"','"+aadhar+"','"+usr+"','"+pass+"','"+work+"');");
+            JOptionPane.showMessageDialog(frame, "Staff Added");
+            new MainScreen().setVisible(true);
+            this.setVisible(false);
+        }
+        catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
+        {
+            
+        }
+    }//GEN-LAST:event_addstaff_buttonActionPerformed
+
+    private void back_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_buttonActionPerformed
+        // TODO add your handling code here:
+        new MainScreen().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_back_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,7 +255,9 @@ public class AddStaff extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addstaff_button;
+    private javax.swing.JTextField adhaarf;
     private javax.swing.JButton back_button;
+    private javax.swing.JTextField contactf;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -193,11 +265,9 @@ public class AddStaff extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField namef;
+    private javax.swing.JPasswordField passf;
+    private javax.swing.JTextField userf;
+    private javax.swing.JTextField workf;
     // End of variables declaration//GEN-END:variables
 }

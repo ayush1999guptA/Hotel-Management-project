@@ -5,6 +5,12 @@
  */
 package hotel.management;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ayush guptA
@@ -16,6 +22,37 @@ public class CustomerList extends javax.swing.JFrame {
      */
     public CustomerList() {
         initComponents();
+        showDetails();
+    }
+    
+    public void showDetails(){
+        DefaultTableModel model = (DefaultTableModel)table.getModel();  
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("use hotelsystem;");
+            ResultSet rs=stmt.executeQuery("select * from bookings b join customer c where b.aadhar =c.aadhar and b.checkout is null;");
+            while(rs.next()){
+                String name=rs.getString("name");
+                String contact=rs.getString("contact");
+                String aadhar=rs.getString("aadhar");
+                String room=rs.getString("room");
+                String inhabitants = rs.getString("number_of_persons");
+                
+              model.addRow(new Object[]{name,contact,aadhar,room,inhabitants});
+            }
+            rs.close();  
+            con.close();
+            stmt.close();           
+        }
+        catch(Exception e)
+        {
+
+        }
+        table.setModel(model);        
     }
 
     /**
@@ -29,7 +66,7 @@ public class CustomerList extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         home_button = new javax.swing.JButton();
         logout_button = new javax.swing.JButton();
 
@@ -37,33 +74,42 @@ public class CustomerList extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 204));
 
-        jTable1.setBackground(new java.awt.Color(255, 204, 204));
-        jTable1.setForeground(new java.awt.Color(255, 204, 204));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setBackground(new java.awt.Color(204, 204, 204));
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Customer Name", "Contact", "Adhaar Number", "Room number", "Beds in Room", "Inhabitants"
+                "Customer Name", "Contact", "Adhaar Number", "Room number", "Inhabitants"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         home_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         home_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-home-page-32.png"))); // NOI18N
         home_button.setText("Home");
+        home_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                home_buttonActionPerformed(evt);
+            }
+        });
 
         logout_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         logout_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-exit-32.png"))); // NOI18N
         logout_button.setText("Logout");
+        logout_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -102,6 +148,18 @@ public class CustomerList extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void home_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_home_buttonActionPerformed
+        // TODO add your handling code here:
+        new MainScreen().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_home_buttonActionPerformed
+
+    private void logout_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_buttonActionPerformed
+        // TODO add your handling code here:
+        new Login().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_logout_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -142,7 +200,7 @@ public class CustomerList extends javax.swing.JFrame {
     private javax.swing.JButton home_button;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton logout_button;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
