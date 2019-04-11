@@ -185,11 +185,25 @@ public class Login extends javax.swing.JFrame {
             stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS hotelsystem;");
             stmt.executeUpdate("USE hotelsystem");
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS staff (id int NOT NULL PRIMARY KEY, name varchar(20) NOT NULL, contact varchar(20) NOT NULL, aadhar  varchar(20) NOT NULL, username  varchar(20) NOT NULL UNIQUE, password  varchar(20) NOT NULL, work  varchar(20) NOT NULL);");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS room (id int NOT NULL PRIMARY KEY, beds int NOT NULL, capacity int NOT NULL, price int NOT NULL, occupied int NOT NULL );");
             ResultSet rs = stmt.executeQuery("select COUNT(*) from staff;");
             rs.next();
-            String count =rs.getString("COUNT(*)");
+            String count = rs.getString("COUNT(*)");
             if(count.equals("0")){
                 stmt.executeUpdate("INSERT into staff values(1,'admin','0','0','admin','1234','admin');");
+            }
+            rs = stmt.executeQuery("select COUNT(*) from staff;");
+            rs.next();
+            count = rs.getString("COUNT(*)");
+            if(count.equals("0")){
+                stmt.executeUpdate("INSERT into room values(101,1,1,500,0);");
+                stmt.executeUpdate("INSERT into room values(102,2,2,900,0);");
+                stmt.executeUpdate("INSERT into room values(103,1,2,800,0);");
+                stmt.executeUpdate("INSERT into room values(104,2,4,1600,0);");
+                stmt.executeUpdate("INSERT into room values(201,1,1,800,0);");
+                stmt.executeUpdate("INSERT into room values(202,1,2,1500,0);");
+                stmt.executeUpdate("INSERT into room values(203,3,6,2500,0);");
+                stmt.executeUpdate("INSERT into room values(204,4,4,3500,0);");
             }
             
         }
