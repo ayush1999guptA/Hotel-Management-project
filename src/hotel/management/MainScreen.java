@@ -51,7 +51,7 @@ public class MainScreen extends javax.swing.JFrame {
 
         rest_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         rest_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-branding-64.png"))); // NOI18N
-        rest_button.setText("Restaurent");
+        rest_button.setText("Restaurant");
 
         room_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         room_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-address-book-64.png"))); // NOI18N
