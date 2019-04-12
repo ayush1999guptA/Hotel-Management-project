@@ -10,5 +10,5 @@ package hotel.management;
  * @author Prajwal
  */
 public class Credentials {
-    public static String sqlPassword = "";
+    public static String sqlPassword = "1234";
 }

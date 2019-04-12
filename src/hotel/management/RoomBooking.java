@@ -268,6 +268,11 @@ public class RoomBooking extends javax.swing.JFrame {
             ResultSet rs = stmt.executeQuery("select * from room where id="+room+";");
             rs.next();
             int max = Integer.parseInt(rs.getString("capacity"));
+            int occ = Integer.parseInt(rs.getString("occupied"));
+            if(occ==1){
+                JOptionPane.showMessageDialog(frame, "Room is already occupied");
+                return;
+            }
             int inhabs = Integer.parseInt(inhab);
             if(inhabs>max){
                 JOptionPane.showMessageDialog(frame, "Person limit exceeding");

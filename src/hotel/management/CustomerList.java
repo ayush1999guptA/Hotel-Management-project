@@ -200,34 +200,11 @@ public class CustomerList extends javax.swing.JFrame {
             long days = (time-chkin)/div+1;
             bill=bill+price*days;
             
-            String[] list_food=new String[100];
-            ResultSet rse = stmt.executeQuery("select * from bookfood;");
-            int c=0;
-            while(rse.next()){
-                String temp_no = rse.getString("room_id");
-                if(room.equals(temp_no)){
-                    list_food[c]=rse.getString("item_name");
-                    c++;
-                }
-            }
-            
-            stmt.executeUpdate("DELETE FROM bookfood WHERE room_id ='"+room+"';");
-            int food_total=0;
-            for(int i=0;i<c;i++)
-            {
-                String temp_food=list_food[i];
-                ResultSet rse2 = stmt.executeQuery("select * from restitem;");
-                    String temp_name = rse2.getString("item_name");
-                    if(temp_name.equals(temp_food)){
-                        food_total+=Integer.parseInt(rse2.getString("item_price"));
-                    }
-            }
-            bill+=food_total;
-            
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(this, "Bill: "+bill, "Do you Want to Checkout?", dialogButton);
             if(dialogResult == 0) {
                 stmt.executeUpdate("update room set occupied=0 where id="+room+";");
+              //  stmt.executeUpdate("DELETE FROM bookfood WHERE room_id ="+room+";");
                 stmt.executeUpdate("update bookings set checkout='"+time+"' where id="+id+";");
                 stmt.executeUpdate("update bookings set amount="+bill+" where id="+id+";");
                 JOptionPane.showMessageDialog(frame, "Checked Out");

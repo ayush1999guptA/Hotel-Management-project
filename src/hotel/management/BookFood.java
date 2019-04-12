@@ -173,10 +173,23 @@ public class BookFood extends javax.swing.JFrame {
             }
             if(f3==0) 
                     JOptionPane.showMessageDialog(null, "Food Item not available");
-            rse.close();
             
             if(f==1&&f3==1){
-                stmt.executeUpdate("insert into bookfood(room_id,item_name) values('"+qroom+"','"+qitem+"');");
+                stmt.executeUpdate("insert into bookfood values("+qroom+",'"+qitem+"');");
+                ResultSet rs2 = stmt.executeQuery("select * from restitem where item_name='"+qitem+"';");
+                rs2.next();
+                String price = rs2.getString("item_price");
+                int pr = Integer.parseInt(price);
+         
+                rs2 = stmt.executeQuery("select * from bookings where room="+qroom+" and checkout is null;");
+                System.out.println("fck");
+                rs2.next();
+                int prices = Integer.parseInt(rs2.getString("amount"));
+                String id = rs2.getString("id");
+                prices+=pr;
+                System.out.println("fck");
+                stmt.executeUpdate("update bookings set amount="+prices+" where id="+id+";");
+                
                 JOptionPane.showMessageDialog(null, "Food Booked");
                 new RestMenu().setVisible(true);
                 this.setVisible(false);
