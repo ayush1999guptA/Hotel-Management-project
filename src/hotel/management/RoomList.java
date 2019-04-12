@@ -119,6 +119,11 @@ public class RoomList extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         bookButton.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -202,6 +207,16 @@ public class RoomList extends javax.swing.JFrame {
         new Login().setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_logout_buttonActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        // TODO add your handling code here:
+        int row = table.rowAtPoint(evt.getPoint());
+        String room = (String) table.getValueAt(row, 0);
+        RoomBooking rb = new RoomBooking();
+        rb.setTextField(room);
+        rb.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_tableMouseClicked
 
     /**
      * @param args the command line arguments

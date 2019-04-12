@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Date;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,6 +27,7 @@ public class CustomerList extends javax.swing.JFrame {
         initComponents();
         showDetails();
     }
+    private JFrame frame;
     
     public void showDetails(){
         DefaultTableModel model = (DefaultTableModel)table.getModel();  
@@ -89,6 +93,11 @@ public class CustomerList extends javax.swing.JFrame {
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+        });
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(table);
@@ -160,6 +169,58 @@ public class CustomerList extends javax.swing.JFrame {
         new Login().setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_logout_buttonActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        // TODO add your handling code here:
+        int row = table.rowAtPoint(evt.getPoint());
+        String room = (String) table.getValueAt(row, 3);
+        String aadhar = (String) table.getValueAt(row, 2);
+        
+        
+        Date date = new Date();
+        long time = date.getTime();
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("use hotelsystem;");
+            ResultSet rs=stmt.executeQuery("select * from bookings b join customer c where b.aadhar =c.aadhar and b.checkout is null and b.aadhar='"+aadhar+"';");
+            rs.next();
+            String id = rs.getString("id");
+            String amount = rs.getString("amount");
+            String checkin = rs.getString("checkin");
+            long chkin = Long.parseLong(checkin);
+            long bill = Long.parseLong(amount);
+            rs = stmt.executeQuery("select * from room where id="+room+";");
+            rs.next();
+            int price = Integer.parseInt(rs.getString("price"));
+            long div = 1000*60*60*24;
+            long days = (time-chkin)/div+1;
+            bill=bill+price*days;
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bill: "+bill, "Do you Want to Checkout?", dialogButton);
+            if(dialogResult == 0) {
+                stmt.executeUpdate("update room set occupied=0 where id="+room+";");
+                stmt.executeUpdate("update bookings set checkout='"+time+"' where id="+id+";");
+                stmt.executeUpdate("update bookings set amount="+bill+" where id="+id+";");
+                JOptionPane.showMessageDialog(frame, "Checked Out");
+                new CustomerList().setVisible(true);
+                this.setVisible(false);
+                con.close();
+                stmt.close();          
+            } 
+            else{
+                return;
+            }             
+        }
+        catch(Exception e)
+        {
+            
+        }
+        
+    }//GEN-LAST:event_tableMouseClicked
 
     /**
      * @param args the command line arguments

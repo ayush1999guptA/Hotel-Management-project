@@ -182,14 +182,14 @@ public class AddStaff extends javax.swing.JFrame {
         }
         int l =contact.length();
         for(int i=0;i<l;i++){
-            if(contact.charAt(i)>'9'||contact.charAt(i)<'0'){
+            if(contact.charAt(i)>'9'||contact.charAt(i)<'0'||l!=10){
                 JOptionPane.showMessageDialog(frame, "Invalid contact");
                 return;
             }
         }
         l =aadhar.length();
         for(int i=0;i<l;i++){
-            if(aadhar.charAt(i)>'9'||aadhar.charAt(i)<'0'){
+            if(aadhar.charAt(i)>'9'||aadhar.charAt(i)<'0'||l!=12){
                 JOptionPane.showMessageDialog(frame, "Invalid Aadhar");
                 return;
             }
@@ -201,6 +201,7 @@ public class AddStaff extends javax.swing.JFrame {
             Statement stmt;
             stmt=con.createStatement();
             stmt.executeUpdate("USE hotelsystem");
+            System.out.println(""+name+contact+aadhar+usr+pass);
             stmt.executeUpdate("insert into staff(name,contact,aadhar,username,password,work) values('"+name+"','"+contact+"','"+aadhar+"','"+usr+"','"+pass+"','"+work+"');");
             JOptionPane.showMessageDialog(frame, "Staff Added");
             new MainScreen().setVisible(true);
