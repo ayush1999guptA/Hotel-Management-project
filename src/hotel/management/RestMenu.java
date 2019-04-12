@@ -5,6 +5,12 @@
  */
 package hotel.management;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ayush guptA
@@ -16,6 +22,7 @@ public class RestMenu extends javax.swing.JFrame {
      */
     public RestMenu() {
         initComponents();
+        showDetails();
     }
 
     /**
@@ -32,7 +39,7 @@ public class RestMenu extends javax.swing.JFrame {
         logout_button = new javax.swing.JButton();
         back_button = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         bookfood_button = new javax.swing.JButton();
         additem_button = new javax.swing.JButton();
         removeitem_button = new javax.swing.JButton();
@@ -45,17 +52,32 @@ public class RestMenu extends javax.swing.JFrame {
         home_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         home_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-home-page-32.png"))); // NOI18N
         home_button.setText("Home");
+        home_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                home_buttonActionPerformed(evt);
+            }
+        });
 
         logout_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         logout_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-exit-32.png"))); // NOI18N
         logout_button.setText("Logout");
+        logout_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_buttonActionPerformed(evt);
+            }
+        });
 
         back_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         back_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-go-back-32.png"))); // NOI18N
         back_button.setText("Back");
+        back_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_buttonActionPerformed(evt);
+            }
+        });
 
-        jTable1.setBackground(new java.awt.Color(255, 204, 204));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setBackground(new java.awt.Color(255, 204, 204));
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -63,11 +85,16 @@ public class RestMenu extends javax.swing.JFrame {
                 "Item Number", "Item Name", "Price per serving"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         bookfood_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         bookfood_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-tableware-64.png"))); // NOI18N
         bookfood_button.setText("Book Food For Room");
+        bookfood_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bookfood_buttonActionPerformed(evt);
+            }
+        });
 
         additem_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         additem_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-basket-64.png"))); // NOI18N
@@ -81,6 +108,11 @@ public class RestMenu extends javax.swing.JFrame {
         removeitem_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         removeitem_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-fallen-ice-cream-cone-64.png"))); // NOI18N
         removeitem_button.setText("Remove Item ");
+        removeitem_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeitem_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -141,9 +173,69 @@ public class RestMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void showDetails(){
+        DefaultTableModel model = (DefaultTableModel)table.getModel();  
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("use hotelsystem;");
+            ResultSet rs=stmt.executeQuery("select * from restitem;");
+            int count=1;
+            while(rs.next()){
+                String name=rs.getString("item_name");
+                String contact=rs.getString("item_price");        
+              model.addRow(new Object[]{count,name,contact});
+              count++;
+            }
+            rs.close();  
+            con.close();
+            stmt.close();           
+        }
+        catch(Exception e)
+        {
+
+        }
+        table.setModel(model);        
+    }
+    
     private void additem_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_additem_buttonActionPerformed
         // TODO add your handling code here:
+        new AddItem().setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_additem_buttonActionPerformed
+
+    private void bookfood_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookfood_buttonActionPerformed
+        // TODO add your handling code here:
+        new BookFood().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_bookfood_buttonActionPerformed
+
+    private void removeitem_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeitem_buttonActionPerformed
+        // TODO add your handling code here:
+        new RemoveItem().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_removeitem_buttonActionPerformed
+
+    private void back_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_buttonActionPerformed
+        // TODO add your handling code here:
+        new MainScreen().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_back_buttonActionPerformed
+
+    private void logout_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_buttonActionPerformed
+        // TODO add your handling code here:
+        new Login().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_logout_buttonActionPerformed
+
+    private void home_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_home_buttonActionPerformed
+        // TODO add your handling code here:
+        new MainScreen().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_home_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,8 +279,8 @@ public class RestMenu extends javax.swing.JFrame {
     private javax.swing.JButton home_button;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton logout_button;
     private javax.swing.JButton removeitem_button;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

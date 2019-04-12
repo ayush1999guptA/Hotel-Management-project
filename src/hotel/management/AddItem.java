@@ -5,6 +5,13 @@
  */
 package hotel.management;
 
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ayush guptA
@@ -31,9 +38,9 @@ public class AddItem extends javax.swing.JFrame {
         back_button = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        item_name = new javax.swing.JTextField();
+        item_price = new javax.swing.JTextField();
+        additem_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,9 +59,14 @@ public class AddItem extends javax.swing.JFrame {
 
         jLabel2.setText("Item Price");
 
-        jButton1.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-basket-64.png"))); // NOI18N
-        jButton1.setText("Add Item");
+        additem_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
+        additem_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-basket-64.png"))); // NOI18N
+        additem_button.setText("Add Item");
+        additem_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                additem_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -72,11 +84,11 @@ public class AddItem extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(63, 63, 63)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(jTextField2)))
+                            .addComponent(item_name, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(item_price)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(208, 208, 208)
-                        .addComponent(jButton1)))
+                        .addComponent(additem_button)))
                 .addContainerGap(232, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -86,13 +98,13 @@ public class AddItem extends javax.swing.JFrame {
                 .addGap(64, 64, 64)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(item_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(item_price, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(additem_button)
                 .addGap(90, 90, 90))
         );
 
@@ -112,7 +124,45 @@ public class AddItem extends javax.swing.JFrame {
 
     private void back_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_buttonActionPerformed
         // TODO add your handling code here:
+        new RestMenu().setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_back_buttonActionPerformed
+
+    private void additem_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_additem_buttonActionPerformed
+        // TODO add your handling code here:
+        
+        String qname,qprice;
+        qname=item_name.getText();
+        qprice = item_price.getText();
+        if(qname.equals("")||qprice.equals("")){
+            JOptionPane.showMessageDialog(null, "Please fill the details");
+            return;
+        }
+        int l =qprice.length();
+        for(int i=0;i<l;i++){
+            if(qprice.charAt(i)>'9'||qprice.charAt(i)<'0'){
+                JOptionPane.showMessageDialog(null, "Invalid price");
+                return;
+            }
+        }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("USE hotelsystem");
+            stmt.executeUpdate("insert into restitem(item_name,item_price) values('"+qname+"','"+qprice+"');");
+            JOptionPane.showMessageDialog(null, "Item Added");
+            new RestMenu().setVisible(true);
+            this.setVisible(false);
+        }
+        catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
+        {
+            
+        }
+        
+    }//GEN-LAST:event_additem_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,12 +200,12 @@ public class AddItem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton additem_button;
     private javax.swing.JButton back_button;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField item_name;
+    private javax.swing.JTextField item_price;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

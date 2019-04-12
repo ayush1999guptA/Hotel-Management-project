@@ -188,6 +188,8 @@ public class Login extends javax.swing.JFrame {
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS customer (aadhar  varchar(20) PRIMARY KEY, name varchar(20) NOT NULL, contact varchar(20) NOT NULL,address varchar(30),nation varchar(30) );");
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS bookings (id int primary key auto_increment, aadhar  varchar(20) not null, number_of_persons int NOT NULL, room int NOT NULL,checkin varchar(30) not null,checkout varchar(30),amount int default 0 );");
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS room (id int NOT NULL PRIMARY KEY, beds int NOT NULL, capacity int NOT NULL, price int NOT NULL, occupied int NOT NULL );");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS restitem (item_name varchar(20) NOT NULL, item_price varchar(20) NOT NULL);");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS bookfood (room_id int NOT NULL,item_name varchar(20) NOT NULL);");
             ResultSet rs = stmt.executeQuery("select COUNT(*) from staff;");
             rs.next();
             String count = rs.getString("COUNT(*)");

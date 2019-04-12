@@ -5,6 +5,13 @@
  */
 package hotel.management;
 
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ayush guptA
@@ -30,7 +37,7 @@ public class RemoveItem extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         back_button = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        item_name = new javax.swing.JTextField();
         remove_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -40,12 +47,22 @@ public class RemoveItem extends javax.swing.JFrame {
         back_button.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         back_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-go-back-32.png"))); // NOI18N
         back_button.setText("Back");
+        back_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_buttonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Item Name");
 
         remove_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
         remove_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-fallen-ice-cream-cone-64.png"))); // NOI18N
         remove_button.setText("Remove Item");
+        remove_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                remove_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -60,7 +77,7 @@ public class RemoveItem extends javax.swing.JFrame {
                         .addGap(206, 206, 206)
                         .addComponent(jLabel1)
                         .addGap(43, 43, 43)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(item_name, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(230, 230, 230)
                         .addComponent(remove_button)))
@@ -73,7 +90,7 @@ public class RemoveItem extends javax.swing.JFrame {
                 .addGap(156, 156, 156)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(item_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(71, 71, 71)
                 .addComponent(remove_button)
                 .addContainerGap(91, Short.MAX_VALUE))
@@ -92,6 +109,40 @@ public class RemoveItem extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void remove_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remove_buttonActionPerformed
+        // TODO add your handling code here:
+        String qname;
+        qname=item_name.getText();
+        
+        if(qname.equals("")){
+            JOptionPane.showMessageDialog(null, "Please fill the details");
+            return;
+        }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("USE hotelsystem");
+            stmt.executeUpdate("DELETE FROM restitem WHERE item_name ='"+qname+"';");
+            JOptionPane.showMessageDialog(null, "Item Removed");
+            new RestMenu().setVisible(true);
+            this.setVisible(false);
+        }
+        catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
+        {
+            
+        }
+        
+    }//GEN-LAST:event_remove_buttonActionPerformed
+
+    private void back_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_buttonActionPerformed
+        // TODO add your handling code here:
+        new RestMenu().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_back_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -130,9 +181,9 @@ public class RemoveItem extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back_button;
+    private javax.swing.JTextField item_name;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton remove_button;
     // End of variables declaration//GEN-END:variables
 }
