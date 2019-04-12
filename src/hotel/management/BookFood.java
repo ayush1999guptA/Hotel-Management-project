@@ -5,6 +5,14 @@
  */
 package hotel.management;
 
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ayush guptA
@@ -31,9 +39,9 @@ public class BookFood extends javax.swing.JFrame {
         back_button = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        room = new javax.swing.JTextField();
+        item = new javax.swing.JTextField();
+        book_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,12 +60,12 @@ public class BookFood extends javax.swing.JFrame {
 
         jLabel2.setText("Item Name");
 
-        jButton1.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-tableware-64.png"))); // NOI18N
-        jButton1.setText("Book Food");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        book_button.setFont(new java.awt.Font("Tw Cen MT Condensed", 0, 24)); // NOI18N
+        book_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-tableware-64.png"))); // NOI18N
+        book_button.setText("Book Food");
+        book_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                book_buttonActionPerformed(evt);
             }
         });
 
@@ -77,28 +85,28 @@ public class BookFood extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(54, 54, 54)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                            .addComponent(jTextField2)))
+                            .addComponent(room, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                            .addComponent(item)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(224, 224, 224)
-                        .addComponent(jButton1)))
+                        .addComponent(book_button)))
                 .addContainerGap(255, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(item, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(back_button)
                         .addGap(104, 104, 104)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(room, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(59, 59, 59)
                         .addComponent(jLabel2)))
                 .addGap(74, 74, 74)
-                .addComponent(jButton1)
+                .addComponent(book_button)
                 .addContainerGap(105, Short.MAX_VALUE))
         );
 
@@ -116,9 +124,75 @@ public class BookFood extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void book_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_book_buttonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        String qroom,qitem;
+        qroom=room.getText();
+        qitem = item.getText();
+        if(qroom.equals("")||qitem.equals("")){
+            JOptionPane.showMessageDialog(null, "Please fill the details");
+            return;
+        }
+        
+        
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con;
+            con=DriverManager.getConnection("JDBC:mysql://localhost:3306/mysql","root",Credentials.sqlPassword);
+            Statement stmt;
+            stmt=con.createStatement();
+            stmt.executeUpdate("USE hotelsystem");
+            
+            ResultSet rs = stmt.executeQuery("select * from room;");
+            int f=0,f2=0;
+            while(rs.next()){
+                String id = rs.getString("id");
+                String occupied = rs.getString("occupied");
+                if(qroom.equals(id)){
+                    f=1;f2=1;
+                    if(occupied.equals("0")){
+                    JOptionPane.showMessageDialog(null, "Room is Vacant");
+                    f=0;
+                    }
+                    break;
+                }
+            }
+            if(f2==0) 
+                    JOptionPane.showMessageDialog(null, "Room no. not available");
+            rs.close();
+            
+            ResultSet rse = stmt.executeQuery("select * from restitem;");
+            int f3=0;
+            while(rse.next()){
+                String temp_name = rse.getString("item_name");
+                if(qitem.equals(temp_name)){
+                    f3=1;
+                    break;
+                }
+            }
+            if(f3==0) 
+                    JOptionPane.showMessageDialog(null, "Food Item not available");
+            rse.close();
+            
+            if(f==1&&f3==1){
+                stmt.executeUpdate("insert into bookfood(room_id,item_name) values('"+qroom+"','"+qitem+"');");
+                JOptionPane.showMessageDialog(null, "Food Booked");
+                new RestMenu().setVisible(true);
+                this.setVisible(false);
+            }
+            else{
+                room.setText("");
+                item.setText("");
+            }
+            
+            
+        }
+        catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
+        {
+            
+        }
+    }//GEN-LAST:event_book_buttonActionPerformed
 
     private void back_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_buttonActionPerformed
         // TODO add your handling code here:
@@ -163,11 +237,11 @@ public class BookFood extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back_button;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton book_button;
+    private javax.swing.JTextField item;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField room;
     // End of variables declaration//GEN-END:variables
 }
