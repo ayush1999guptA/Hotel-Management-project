@@ -8,6 +8,7 @@ package hotel.management;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -126,10 +127,26 @@ public class RemoveItem extends javax.swing.JFrame {
             Statement stmt;
             stmt=con.createStatement();
             stmt.executeUpdate("USE hotelsystem");
-            stmt.executeUpdate("DELETE FROM restitem WHERE item_name ='"+qname+"';");
-            JOptionPane.showMessageDialog(null, "Item Removed");
-            new RestMenu().setVisible(true);
-            this.setVisible(false);
+            
+            ResultSet rse = stmt.executeQuery("select * from restitem;");
+            int f3=0;
+            while(rse.next()){
+                String temp_name = rse.getString("item_name");
+                if(qname.equals(temp_name)){
+                    f3=1;
+                    break;
+                }
+            }
+            if(f3==0) 
+                    JOptionPane.showMessageDialog(null, "Food Item not available");
+            rse.close();
+            if(f3==1){
+                stmt.executeUpdate("DELETE FROM restitem WHERE item_name ='"+qname+"';");
+                JOptionPane.showMessageDialog(null, "Item Removed");
+                new RestMenu().setVisible(true);
+                this.setVisible(false);
+            }
+            else item_name.setText("");
         }
         catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
         {
