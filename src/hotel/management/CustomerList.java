@@ -204,7 +204,7 @@ public class CustomerList extends javax.swing.JFrame {
             int dialogResult = JOptionPane.showConfirmDialog(this, "Bill: "+bill, "Do you Want to Checkout?", dialogButton);
             if(dialogResult == 0) {
                 stmt.executeUpdate("update room set occupied=0 where id="+room+";");
-              //  stmt.executeUpdate("DELETE FROM bookfood WHERE room_id ="+room+";");
+                stmt.executeUpdate("DELETE FROM bookfood WHERE room_id ="+room+";");
                 stmt.executeUpdate("update bookings set checkout='"+time+"' where id="+id+";");
                 stmt.executeUpdate("update bookings set amount="+bill+" where id="+id+";");
                 JOptionPane.showMessageDialog(frame, "Checked Out");

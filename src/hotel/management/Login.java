@@ -208,6 +208,10 @@ public class Login extends javax.swing.JFrame {
                 stmt.executeUpdate("INSERT into room values(202,1,2,1500,0);");
                 stmt.executeUpdate("INSERT into room values(203,3,6,2500,0);");
                 stmt.executeUpdate("INSERT into room values(204,4,4,3500,0);");
+                stmt.executeUpdate("INSERT into room values(301,2,3,1600,0);");
+                stmt.executeUpdate("INSERT into room values(302,2,2,2000,0);");
+                stmt.executeUpdate("INSERT into room values(303,5,6,4000,0);");
+                stmt.executeUpdate("INSERT into room values(304,4,6,4800,0);");
             }
             
         }

@@ -88,7 +88,7 @@ public class RoomBooking extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Custome Name :");
+        jLabel1.setText("Customer Name :");
 
         jLabel2.setText("Adhaar Number: ");
 
@@ -327,6 +327,7 @@ public class RoomBooking extends javax.swing.JFrame {
             contactf.setText(contact);
             addressf.setText(address);
             nationf.setText(nation);
+            JOptionPane.showMessageDialog(frame, "Aadhar number verified");
             rs.close();  
             con.close();
             stmt.close();           
