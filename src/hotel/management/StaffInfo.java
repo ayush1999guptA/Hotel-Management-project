@@ -91,7 +91,7 @@ public class StaffInfo extends javax.swing.JFrame {
             }
         });
 
-        table.setBackground(new java.awt.Color(204, 204, 204));
+        table.setBackground(new java.awt.Color(255, 204, 204));
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
