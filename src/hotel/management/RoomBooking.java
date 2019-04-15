@@ -275,7 +275,7 @@ public class RoomBooking extends javax.swing.JFrame {
             }
             int inhabs = Integer.parseInt(inhab);
             if(inhabs>max){
-                JOptionPane.showMessageDialog(frame, "Person limit exceeding");
+                JOptionPane.showMessageDialog(frame, "Person limit exceeding \nMax "+max);
                 return;
             }
             if(f==1){
@@ -318,6 +318,7 @@ public class RoomBooking extends javax.swing.JFrame {
             stmt=con.createStatement();
             stmt.executeUpdate("use hotelsystem;");
             namef.setText("");
+            JOptionPane.showMessageDialog(frame, "Aadhar number verified");
             ResultSet rs=stmt.executeQuery("select * from customer where aadhar ='"+aadhar+"';");
             rs.next();
             String name=rs.getString("name");
@@ -328,8 +329,6 @@ public class RoomBooking extends javax.swing.JFrame {
             contactf.setText(contact);
             addressf.setText(address);
             nationf.setText(nation);
-            
-            JOptionPane.showMessageDialog(frame, "Aadhar number verified");
             rs.close();  
             con.close();
             stmt.close();           
