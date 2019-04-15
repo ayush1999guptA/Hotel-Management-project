@@ -169,7 +169,7 @@ public class Login extends javax.swing.JFrame {
         }
         catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
         {
-            
+            System.out.println("Esception: "+e);
         }
         
     }//GEN-LAST:event_login_buttonActionPerformed
@@ -217,7 +217,7 @@ public class Login extends javax.swing.JFrame {
         }
         catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
         {
-            
+            JOptionPane.showMessageDialog(null, "Exception" + e);
         }
     }
     /**

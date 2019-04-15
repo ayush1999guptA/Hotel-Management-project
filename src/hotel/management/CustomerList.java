@@ -54,7 +54,7 @@ public class CustomerList extends javax.swing.JFrame {
         }
         catch(Exception e)
         {
-
+            System.out.println("Esception: "+e);
         }
         table.setModel(model);        
     }
@@ -219,7 +219,7 @@ public class CustomerList extends javax.swing.JFrame {
         }
         catch(Exception e)
         {
-            
+            System.out.println("Esception: "+e);
         }
         
     }//GEN-LAST:event_tableMouseClicked

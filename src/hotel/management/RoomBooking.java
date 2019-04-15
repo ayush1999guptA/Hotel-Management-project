@@ -291,7 +291,7 @@ public class RoomBooking extends javax.swing.JFrame {
         }
         catch(Exception e)
         {
-            
+            System.out.println("Esception: "+e);
         }
         
     }//GEN-LAST:event_book_buttonActionPerformed
@@ -317,6 +317,7 @@ public class RoomBooking extends javax.swing.JFrame {
             Statement stmt;
             stmt=con.createStatement();
             stmt.executeUpdate("use hotelsystem;");
+            namef.setText("");
             ResultSet rs=stmt.executeQuery("select * from customer where aadhar ='"+aadhar+"';");
             rs.next();
             String name=rs.getString("name");
@@ -327,6 +328,7 @@ public class RoomBooking extends javax.swing.JFrame {
             contactf.setText(contact);
             addressf.setText(address);
             nationf.setText(nation);
+            
             JOptionPane.showMessageDialog(frame, "Aadhar number verified");
             rs.close();  
             con.close();
@@ -334,7 +336,7 @@ public class RoomBooking extends javax.swing.JFrame {
         }
         catch(Exception e)
         {
-            
+            System.out.println("Esception: "+e);
         }
         if(namef.getText().equals(""))
             f=1;

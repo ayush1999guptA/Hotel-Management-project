@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -49,7 +50,7 @@ public class RoomList extends javax.swing.JFrame {
         }
         catch(Exception e)
         {
-
+            System.out.println("Esception: "+e);
         }
         table.setModel(model);        
     }

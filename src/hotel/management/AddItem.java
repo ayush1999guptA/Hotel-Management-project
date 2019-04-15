@@ -159,7 +159,7 @@ public class AddItem extends javax.swing.JFrame {
         }
         catch(  HeadlessException | ClassNotFoundException | NumberFormatException | SQLException e)
         {
-            
+            System.out.println("Esception: "+e);
         }
         
     }//GEN-LAST:event_additem_buttonActionPerformed
