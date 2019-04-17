@@ -8,6 +8,10 @@ This is a JAVA application which is a hotel management system.
 - Edit the sqlPassword to match the password of sql in your system
 - Run dist/Result
 
+## Entity Relationship Diagram
+
+![img](ERD.png)
+
 ## Implementation
 
 ### About the Framework:
