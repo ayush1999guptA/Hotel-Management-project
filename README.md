@@ -1,6 +1,6 @@
 # Hotel Management System
 
-This is a JAVA application which is a hotel management system.
+This is a JAVA application which is a Hotel Management System.
 
 ## How to Use
 - Use Windows
