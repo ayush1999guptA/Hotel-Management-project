@@ -48,10 +48,10 @@ Each database product that supports JDBC provides a JDBC driver that must be dyn
 The Java program must import java.sql.*, which contains the interface definitions for the functionality provided by JDBC. The first step in accessing a database from a Java program is to open a connection to the database. This step is required to select which database to use, here mysql. Only after opening a connection can a Java program execute SQL statements. A connection is opened using the getConnection method of the DriverManager class (within java.sql). This method takes three parameters.  
   
 - The first parameter to the getConnection call is a string that specifies the URL, or machine name, where the server runs (here, mysql://localhost:3306/mysql), along with possibly some other information such as the protocol to be used to communicate with the database, the port number the database system uses for communication, and the specific database on the server to be used.  
-- The second parameter to getConnection is a database user identifier, which is a string.  
-- The third parameter is a password, which is also a string and is stored in Credentials.java file.  
+- The second parameter to getConnection is a database user identifier, that is a string.  
+- The third parameter is a password, that is also a string and is stored in Credentials.java file.  
   
-Once a database connection is open, the program can use it to send SQL statements to the database system for execution. This is done via an instance of the class Statement. To execute a statement, we invoke either the executeQuery method or the executeUpdate method, depending on whether the SQL statement is a query (and, thus, returns a result set) or non-query statement such as update, insert, delete, create table, etc. 
+Once a database connection is open, the program can use it to send SQL statements to the database system for execution. This is done via an instance of the class Statement. To execute a statement, we invoke either the executeQuery method or the executeUpdate method, depending on whether the SQL statement is a query (and thus, returns a result set) or non-query statement such as update, insert, delete, create table, etc. 
 
 
 
